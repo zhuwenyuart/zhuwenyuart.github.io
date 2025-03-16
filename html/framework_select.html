@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联邦学习可视化系统</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/framework_select.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航 -->
+        <nav class="sidebar">
+            <div class="logo">FL System</div>
+            <ul class="nav-items">
+                <li><a href="visualization.html"><i class="fas fa-project-diagram"></i>联邦可视化</a></li>
+                <li class="active"><a href="#"><i class="fas fa-cube"></i>任务创建</a></li>
+                <li><a href="history.html"><i class="fas fa-history"></i>历史数据</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i>个人中心</a></li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="content">
+            <div class="config-container">
+            <h1 class="page-title">实验配置</h1>
+            
+            <!-- 实验名称 -->
+            <div class="form-group">
+                <label for="experiment-name">实验名称</label>
+                <input type="text" id="experiment-name" placeholder="请输入实验名称">
+            </div>
+
+            <!-- 算法配置 -->
+            <div class="config-card">
+                <h2><i class="fas fa-brain"></i> 算法设置</h2>
+                <div class="config-grid">
+                    <div class="form-group">
+                        <label>联邦算法</label>
+                        <select class="custom-select">
+                            <option>FedAvg</option>
+                            <option>FedProx</option>
+                            <option>SCAFFOLD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>模型架构</label>
+                        <select class="custom-select">
+                            <option>CNN</option>
+                            <option>ResNet</option>
+                            <option>LSTM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据配置 -->
+            <div class="config-card">
+                <h2><i class="fas fa-database"></i> 数据设置</h2>
+                <div class="config-grid">
+                    <div class="form-group">
+                        <label>数据集</label>
+                        <select class="custom-select">
+                            <option>MNIST</option>
+                            <option>CIFAR-10</option>
+                            <option>ImageNet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>数据分布</label>
+                        <select class="custom-select">
+                            <option>IID 分布</option>
+                            <option>Non-IID 分布</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设备配置 -->
+            <div class="config-card">
+                <h2><i class="fas fa-server"></i> 设备设置</h2>
+                <div class="config-grid">
+                    <div class="form-group">
+                        <label>边缘服务器数量</label>
+                        <input type="number" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>客户端数量</label>
+                        <input type="number" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>客户端选择算法</label>
+                        <select class="custom-select">
+                            <option>Random</option>
+                            <option>Oort</option>
+                            <option>TIFL</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 超参数设置 -->
+            <div class="config-card">
+                <h2><i class="fas fa-sliders-h"></i> 超参数设置</h2>
+                <div class="param-grid">
+                    <div class="form-group">
+                        <label>本地迭代次数</label>
+                        <input type="number" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>通信轮数</label>
+                        <input type="number" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>学习率</label>
+                        <input type="number" step="0.001" value="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Batch Size</label>
+                        <input type="number" value="32">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary">
+                <i class="fas fa-file-code"></i>
+                创建训练任务
+            </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

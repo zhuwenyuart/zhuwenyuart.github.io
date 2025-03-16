@@ -1,0 +1,52 @@
+<!-- html/profile.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 联邦学习系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧导航 -->
+        <nav class="sidebar">
+            <div class="logo">FL System</div>
+            <ul class="nav-items">
+                <li><a href="visualization.html"><i class="fas fa-project-diagram"></i>联邦学习可视化</a></li>
+                <li><a href="framework_select.html"><i class="fas fa-cube"></i>任务创建</a></li>
+                <li><a href="history.html"><i class="fas fa-history"></i>历史数据</a></li>
+                <li class="active"><a href="#"><i class="fas fa-user"></i>个人中心</a></li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- 登录卡片 -->
+            <div class="login-card">
+                <h2>欢迎回来</h2>
+                <form class="login-form">
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" placeholder="输入注册邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" placeholder="输入密码">
+                    </div>
+                    <button type="submit" class="btn-primary">登录</button>
+                </form>
+                <div class="additional-links">
+                    <a href="#">忘记密码？</a>
+                    <a href="#">注册新账号</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+</body>
+</html>

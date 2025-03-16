@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联邦可视化</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/visualization.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">FL System</div>
+            <ul class="nav-items">
+                <li class="active"><a href="visualization.html"><i class="fas fa-project-diagram"></i>联邦可视化</a></li>
+                <li><a href="framework_select.html"><i class="fas fa-cube"></i>任务创建</a></li>
+                <li><a href="history.html"><i class="fas fa-history"></i>历史数据</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i>个人中心</a></li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <div class="visualization-container">
+                <!-- 云服务器 -->
+                <div class="cloud-layer">
+                    <div class="device-card cloud-server">
+                        <i class="fas fa-cloud fa-3x"></i>
+                        <div class="cloud-info">
+                            <h3>中央服务器</h3>
+                            <div class="server-stats">
+                                <p>迭代轮次: <span>第 23 轮</span></p>
+                                <p>全局准确率: <span>92.5%</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 边缘服务器集群 -->
+                <div class="edge-layer">
+                    <div class="server-cluster">
+                        <!-- 边缘服务器组1 -->
+                        <div class="server-group">
+                            <div class="edge-server with-line">
+                                <i class="fas fa-server fa-2x"></i>
+                                <div class="status-indicator online">边缘节点 01</div>
+                            </div>
+                            <div class="client-grid">
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 01</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 75%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 02</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator offline">离线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 42%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 03</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator idle">空闲</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 04</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 91%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 边缘服务器组2 -->
+                        <div class="server-group">
+                            <div class="edge-server with-line">
+                                <i class="fas fa-server fa-2x"></i>
+                                <div class="status-indicator online">边缘节点 02</div>
+                            </div>
+                            <div class="client-grid">
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 05</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator offline">离线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 33%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 06</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator idle">空闲</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 07</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 57%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 08</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator idle">空闲</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 边缘服务器组3 -->
+                        <div class="server-group">
+                            <div class="edge-server with-line">
+                                <i class="fas fa-server fa-2x"></i>
+                                <div class="status-indicator online">边缘节点 03</div>
+                            </div>
+                            <div class="client-grid">
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 09</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 65%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 10</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator idle">空闲</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 11</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 77%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 12</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 95%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 边缘服务器组4 -->
+                        <div class="server-group">
+                            <div class="edge-server with-line">
+                                <i class="fas fa-server fa-2x"></i>
+                                <div class="status-indicator online">边缘节点 04</div>
+                            </div>
+                            <div class="client-grid">
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 13</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 48%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 14</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator idle">空闲</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 15</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator online">在线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 89%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-card client">
+                                    <i class="fas fa-laptop"></i>
+                                    <div class="client-info">
+                                        <h4>客户端 16</h4>
+                                        <div class="status-group">
+                                            <div class="status-indicator offline">离线</div>
+                                            <div class="status-indicator busy">繁忙</div>
+                                        </div>
+                                        <div class="client-progress">
+                                            <span>迭代: 71%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
