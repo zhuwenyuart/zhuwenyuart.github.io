@@ -369,7 +369,7 @@ padding: 15px 0;}
   color: #666666;
   font-size: 18px;
   font-weight: 600;
-  /* transition: all .3s ease 0s; */
+  transition: all .3s ease 0s;
 }
 .portfolio-title4 a:hover,.portfolio-title3 a:hover {
   color: #333;

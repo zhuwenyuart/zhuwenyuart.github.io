@@ -1,12 +1,48 @@
 .ptb-mine {
     padding: 10px 0 30px 0;
-    /* margin-bottom: 30px; */
 }
 
 .portfolio-container {
-    height: 80vh;
+    height: 90vh;
     overflow-y: auto;
 }
+
+.portfolio .hover-style-4::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(131, 127, 127, 0.8);
+    z-index: 1; /* 确保在图片上方但标题下方 */
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+/* 提升标题层级 */
+.portfolio-title3 {
+    position: absolute;
+    z-index: 2; /* 高于遮罩层 */
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+/* 悬停时状态 */
+.portfolio.hover-style-4:hover::before {
+    opacity: 1;
+}
+
+.portfolio.hover-style-4:hover .portfolio-title3 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
 
 /* 模态框 */
 .image-modal {
@@ -95,7 +131,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(233, 228, 228, 0.9);
     z-index: 9999;
     display: none;
     justify-content: center;
@@ -112,7 +148,7 @@
     position: relative;
     max-width: 90%;
     max-height: 90%;
-    background: #000;
+    background: #f8f7f7;
     padding: 20px;
     border-radius: 8px;
 }
