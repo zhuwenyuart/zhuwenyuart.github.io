@@ -1,0 +1,188 @@
+.ptb-mine {
+    padding: 10px 0 30px 0;
+    /* margin-bottom: 30px; */
+}
+
+.portfolio-container {
+    height: 80vh;
+    overflow-y: auto;
+}
+
+/* 模态框 */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-modal .active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: #000;
+    padding: 20px;
+    border-radius: 8px;
+    animation: modalOpen 0.3s ease-out;
+}
+
+@keyframes modalOpen {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: 0 auto;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.image-modal.active .modal-image {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.close-modal {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #ff0000;
+    transform: rotate(90deg);
+}
+
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-modal.active {
+    opacity: 1;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: #000;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.close-modal {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+/* 作品列表 */
+/* 分类菜单容器 */
+.portfolio-menu {
+    position: relative;
+}
+
+/* PC端按钮样式 */
+.filter-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-buttons button {
+    padding: 8px 20px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-buttons button.active,
+.filter-buttons button:hover {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+/* 移动端下拉菜单 */
+.mobile-filter {
+    display: none;
+    width: 80%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    appearance: none;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center/1em;
+}
+
+/* 响应式切换 */
+@media (max-width: 768px) {
+    .filter-buttons {
+        display: none !important;
+    }
+
+    .mobile-filter {
+        display: block;
+    }
+}
