@@ -1,4 +1,5 @@
-[{
+[
+    {
         "path": "image/2021/玻璃器皿.jpg",
         "name": "玻璃器皿",
         "time": "2021",
@@ -9,6 +10,15 @@
         "detail": [
             "image/2021/玻璃器皿 细节.jpg"
         ]
+    },
+    {
+        "path": "image/2024/色彩空间_工作坊/情绪系列 (1).jpg",
+        "name": "情绪系列 (1)",
+        "time": "2024",
+        "material": "布面油画",
+        "size": "20x30cm",
+        "category": "情绪系列",
+        "des": ""
     },
     {
         "path": "image/2021/沉睡的山峦.jpg",
@@ -184,7 +194,9 @@
     {
         "path": "image/2023/蓝色.jpg",
         "name": "蓝色",
-        "time": "2023",
+        "time": "2022",
+        "material": "布面油画",
+        "size": "20x20cm",
         "category": "单幅创作",
         "des": ""
     },
@@ -192,13 +204,17 @@
         "path": "image/2023/蓝色的海.jpg",
         "name": "蓝色的海",
         "time": "2023",
+        "material": "布面油画",
+        "size": "80x40cm",
         "category": "单幅创作",
         "des": ""
     },
     {
         "path": "image/2023/一切坚固的东西都烟消云散了.jpg",
         "name": "一切坚固的东西都烟消云散了",
-        "time": "2023",
+        "time": "2024",
+        "material": "布面油画",
+        "size": "280x200cm",
         "category": "单幅创作",
         "des": ""
     },
@@ -323,15 +339,7 @@
         "des": ""
     },
 
-    {
-        "path": "image/2024/色彩空间_工作坊/情绪系列 (1).jpg",
-        "name": "情绪系列 (1)",
-        "time": "2024",
-        "material": "布面油画",
-        "size": "20x30cm",
-        "category": "情绪系列",
-        "des": ""
-    },
+
     {
         "path": "image/2024/色彩空间_工作坊/情绪系列 (2).jpg",
         "name": "情绪系列 (2)",

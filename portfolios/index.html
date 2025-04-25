@@ -4594,15 +4594,28 @@ flexibility(document.documentElement);
     <!-- portfolio area start -->
     <div class="portfolio-area ptb-mine">
         <div class="container">
-            <div class="portfolio-menu portfolio2-menu mb-50 home-three">
-                <!-- PC端按钮组 -->
-                <div class="filter-buttons"></div>
 
-                <!-- 移动端下拉菜单 -->
-                <select class="mobile-filter">
-                    <option value="*">全部作品</option>
-                </select>
+            <div class="switch-container">
+                <label class="switch-mine">
+                    <input class="toggle-mine" type="checkbox">
+                    <span class="slider-mine"></span>
+                    <span class="card-side-mine"></span>
+                    <span class="status-label-mine series-mine">系列分类</span>
+                    <span class="status-label-mine time-mine">时间分类</span>
+                </label>
+
+                <div class="portfolio-menu portfolio2-menu mb-50 home-three">
+                    <!-- PC端按钮组 -->
+                    <div class="filter-buttons"></div>
+
+                    <!-- 移动端下拉菜单 -->
+                    <select class="mobile-filter">
+                        <option value="*">全部作品</option>
+                    </select>
+                </div>
             </div>
+
+
             <div class="portfolio-container">
                 <!-- 使用 isotope 库实现瀑布流布局 -->
                 <div class="grid portfolio-style-3 home-3 ">
@@ -4642,6 +4655,12 @@ flexibility(document.documentElement);
     <!-- <script src="js/owl.carousel.min.js"></script>          轮播图插件 -->
 
     <script>
+        // 增加全局状态管理
+        let isTimeMode = false;
+        let artworksData = [];
+        let categoriesData = [];
+        let timesData = [];
+
         // 读取 artwork 数据
         function fetchArtworks(path) {
             return fetch(path)
@@ -4660,35 +4679,89 @@ flexibility(document.documentElement);
                 }));
         }
 
-        // 生成分类按钮
-        function generateFilters(categories) {
+        // 通用分类处理函数
+        function processField(field) {
+            return Array.from(new Set(artworksData.map(item => item[field])))
+                .sort((a, b) => field === 'time' ? b.localeCompare(a) : a.localeCompare(b))
+                .map(value => ({
+                    value,
+                    text: value
+                }));
+        }
+
+        // 修改后的过滤按钮生成
+        function generateFilterButtons(categories) {
             const buttonContainer = document.querySelector('.filter-buttons');
             const selectContainer = document.querySelector('.mobile-filter');
 
-            // 清空现有内容
-            buttonContainer.innerHTML = '';
-            selectContainer.innerHTML = '<option value="*">全部作品</option>';
+            buttonContainer.classList.add('animating-out');
 
-            // 生成PC端按钮
-            const allButton = createButton('*', '全部作品');
-            buttonContainer.appendChild(allButton);
+            setTimeout(() => {
+                buttonContainer.innerHTML = '';
+                selectContainer.innerHTML = '<option value="*">全部作品</option>';
 
-            // 生成移动端选项
-            categories.forEach(category => {
-                // PC端按钮
-                const button = createButton(`.${category.value}`, category.text);
-                buttonContainer.appendChild(button);
+                // 创建新按钮（确保"全部作品"按钮始终存在）
+                const allButton = createButton('*', '全部作品');
+                buttonContainer.appendChild(allButton);
 
-                // 移动端选项
-                const option = document.createElement('option');
-                option.value = `.${category.value}`;
-                option.textContent = category.text;
-                selectContainer.appendChild(option);
+                categories.forEach(cat => {
+                    buttonContainer.appendChild(createButton(`.${cat.value}`, cat.text));
+                    const option = document.createElement('option');
+                    option.value = `.${cat.value}`;
+                    option.textContent = cat.text;
+                    selectContainer.appendChild(option);
+                });
+
+                buttonContainer.classList.remove('animating-out');
+                buttonContainer.classList.add('animating-in');
+
+                setTimeout(() => {
+                    buttonContainer.classList.remove('animating-in');
+
+                    // 强制设置默认过滤为"全部作品"
+                    const activeFilter = '*';
+                    $(`.filter-buttons button[data-filter="${activeFilter}"]`).addClass('active');
+                    $('.grid').isotope({
+                        filter: activeFilter
+                    });
+                }, 300);
+            }, 200);
+        }
+
+        // 绑定事件函数
+        function bindFilterEvents() {
+            $('.portfolio-menu').off('click', 'button').on('click', 'button', function () {
+                const filterValue = $(this).data('filter');
+                $('.grid').isotope({
+                    filter: filterValue
+                });
+                $(this).addClass('active').siblings().removeClass('active');
             });
 
-            // 初始化活动状态
-            buttonContainer.querySelector('button').classList.add('active');
+            $('.mobile-filter').off('change').on('change', function () {
+                const filterValue = this.value;
+                $('.grid').isotope({
+                    filter: filterValue
+                });
+                $(`.filter-buttons button[data-filter="${filterValue}"]`).addClass('active').siblings()
+                    .removeClass('active');
+            });
         }
+
+        // 修改切换事件处理
+        $('.toggle-mine').on('change', function () {
+            isTimeMode = this.checked;
+            const currentData = isTimeMode ? timesData : categoriesData;
+            generateFilterButtons(currentData);
+
+            // 保持原有过滤功能
+            setTimeout(() => {
+                $('.grid').isotope({
+                    filter: '*'
+                });
+                bindFilterEvents(); // 确保重新绑定事件
+            }, 500); // 总动画时间(200+300)
+        });
 
         // 生成按钮
         function createButton(filterValue, text) {
@@ -4705,7 +4778,7 @@ flexibility(document.documentElement);
 
             artworks.forEach(art => {
                 const itemHTML = `
-                        <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category}" data-artwork='${JSON.stringify(art)}'>
+                        <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category} ${art.time}" data-artwork='${JSON.stringify(art)}'>
                             <div class="portfolio hover-style-4">
                                 <div class="image-item">
                                     <img src="../${art.path}" alt="${art.name}" loading="lazy">
@@ -4764,96 +4837,28 @@ flexibility(document.documentElement);
 
 
 
-        // 主入口
-        // 初始化页面
+        // 主入口（初始化流程）
         $(document).ready(function () {
-            // 加载艺术作品数据
-            fetchArtworks('../artwork.json')
-                .then(artworks => {
-                    // 处理分类数据
-                    const categories = processCategories(artworks);
+            fetchArtworks('../artwork.json').then(artworks => {
+                artworksData = artworks;
+                categoriesData = processField('category');
+                timesData = processField('time');
 
-                    // 生成界面元素
-                    generateFilters(categories);
-                    generatePortfolioItems(artworks);
+                generateFilterButtons(categoriesData);
+                generatePortfolioItems(artworks);
+                bindFilterEvents();
 
-                    // 图片点击事件处理
-                    $(document).on('click', '.image-item', function () {
-                        const $img = $(this).find('img');
-                        const imgSrc = $img.attr('src');
-                        const imgAlt = $img.attr('alt');
-
-                        // 预加载图片
-                        const tempImg = new Image();
-                        tempImg.src = imgSrc;
-
-                        const $parent = $(this).closest('[data-artwork]');
-                        const artworkData = JSON.parse($parent.attr('data-artwork'));
-
-                        // 更新图片
-                        const $modalImage = $('.modal-image');
-                        $modalImage.attr('src', `../${artworkData.path}`).attr('alt', artworkData
-                            .name);
-
-                        // 更新信息
-                        $('.artwork-model-name').text(artworkData.name);
-                        $('.material').html(`<strong>材料：</strong>${artworkData.material}`);
-                        $('.size').html(`<strong>尺寸：</strong>${artworkData.size}`);
-                        // $('.description').html(artworkData.des || '暂无描述');
-
-                        tempImg.onload = () => {
-                            // 更新模态框内容
-                            $('.modal-image')
-                                .attr('src', imgSrc)
-                                .attr('alt', imgAlt)
-                                .css({
-                                    transform: 'scale(0.9)',
-                                    opacity: 0
-                                });
-
-                            // 显示模态框
-                            $('.image-modal')
-                                .addClass('active')
-                                .css('display', 'flex');
-
-                            // 触发动画
-                            requestAnimationFrame(() => {
-                                $('.modal-image').css({
-                                    transform: 'scale(1)',
-                                    opacity: 1
-                                });
-                            });
-                        };
-
-                        tempImg.onerror = () => {
-                            console.error('图片加载失败:', imgSrc);
-                        };
+                // 初始化Isotope
+                $('.grid').imagesLoaded().progress(() => {
+                    $('.grid').isotope({
+                        itemSelector: '.grid-item',
+                        percentPosition: true,
+                        masonry: {
+                            columnWidth: '.grid-item'
+                        }
                     });
-
-                    // 初始化Isotope布局
-                    $('.grid').imagesLoaded().progress(() => {
-                        $('.grid').isotope({
-                            itemSelector: '.grid-item',
-                            percentPosition: true,
-                            masonry: {
-                                columnWidth: '.grid-item'
-                            }
-                        });
-
-                        // 分类过滤功能
-                        $('.portfolio-menu').on('click', 'button', function () {
-                            const filterValue = $(this).data('filter');
-                            $('.grid').isotope({
-                                filter: filterValue
-                            });
-                            $(this).addClass('active').siblings().removeClass('active');
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('数据加载失败:', error);
-                    // 可以在这里添加错误提示UI
                 });
+            });
         });
     </script>
 
