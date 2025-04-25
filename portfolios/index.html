@@ -4266,7 +4266,9 @@ flexibility(document.documentElement);
                                                     data-widget_type="text-editor.default">
                                                     <div class="elementor-widget-container">
                                                         <p>我的艺术创作以古典主义为根基，融合超现实主义，在梦境交织中捕捉人类的细腻情感。</p>
-                                                        <p>My artistic creation is based on classicism, integrating surrealism and capturing the subtle vibrations of human emotions.</p>
+                                                        <p>My artistic creation is based on classicism, integrating
+                                                            surrealism and capturing the subtle vibrations of human
+                                                            emotions.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -4602,6 +4604,7 @@ flexibility(document.documentElement);
                 </select>
             </div>
             <div class="portfolio-container">
+                <!-- 使用 isotope 库实现瀑布流布局 -->
                 <div class="grid portfolio-style-3 home-3 ">
                     <div class="row">
                         <!-- 图片内容将通过JavaScript动态生成 -->
@@ -4615,7 +4618,17 @@ flexibility(document.documentElement);
     <div class="image-modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <img class="modal-image" alt="放大图片">
+            <div class="modal-body">
+                <img class="modal-image" alt="放大图片">
+                <div class="artwork-info">
+                    <strong class="artwork-name"></strong>
+                    <div class="artwork-meta">
+                        <p class="material"></p>
+                        <p class="size"></p>
+                        <p class="description"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -4629,6 +4642,24 @@ flexibility(document.documentElement);
     <!-- <script src="js/owl.carousel.min.js"></script>          轮播图插件 -->
 
     <script>
+        // 读取 artwork 数据
+        function fetchArtworks(path) {
+            return fetch(path)
+                .then(response => {
+                    if (!response.ok) throw new Error(`path错误 ${response.status}`);
+                    return response.json();
+                });
+        }
+
+        // 处理分类数据
+        function processCategories(artworks) {
+            return Array.from(new Set(artworks.map(item => item.category)))
+                .map(category => ({
+                    value: category,
+                    text: category
+                }));
+        }
+
         // 生成分类按钮
         function generateFilters(categories) {
             const buttonContainer = document.querySelector('.filter-buttons');
@@ -4639,7 +4670,7 @@ flexibility(document.documentElement);
             selectContainer.innerHTML = '<option value="*">全部作品</option>';
 
             // 生成PC端按钮
-            const allButton = createButton('*', '全部');
+            const allButton = createButton('*', '全部作品');
             buttonContainer.appendChild(allButton);
 
             // 生成移动端选项
@@ -4659,12 +4690,59 @@ flexibility(document.documentElement);
             buttonContainer.querySelector('button').classList.add('active');
         }
 
+        // 生成按钮
         function createButton(filterValue, text) {
             const button = document.createElement('button');
             button.dataset.filter = filterValue;
             button.textContent = text;
             return button;
         }
+
+        // 生成作品项
+        function generatePortfolioItems(artworks) {
+            const portfolioContainer = document.querySelector('.grid .row');
+            portfolioContainer.innerHTML = '';
+
+            artworks.forEach(art => {
+                const itemHTML = `
+                        <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category}" data-artwork='${JSON.stringify(art)}'>
+                            <div class="portfolio hover-style-4">
+                                <div class="image-item">
+                                    <img src="../${art.path}" alt="${art.name}" loading="lazy">
+                                    <div class="portfolio-title3 artwork-name">
+                                        <strong>${art.name}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                portfolioContainer.insertAdjacentHTML('beforeend', itemHTML);
+            });
+        }
+
+        // 关闭模态框功能
+        function closeModal() {
+            $('.modal-image').css({
+                transform: 'scale(0.9)',
+                opacity: 0
+            });
+
+            setTimeout(() => {
+                $('.image-modal')
+                    .removeClass('active')
+                    .css('display', 'none');
+            }, 300);
+        }
+
+        // 绑定关闭事件
+        $('.close-modal').on('click', closeModal);
+        $(document).on('keyup', function (e) {
+            if (e.key === "Escape") closeModal();
+        });
+        $('.image-modal').on('click', function (e) {
+            if ($(e.target).hasClass('image-modal')) closeModal();
+        });
+
 
         // 在Isotope初始化代码后添加下拉菜单事件
         $('.mobile-filter').on('change', function () {
@@ -4684,43 +4762,16 @@ flexibility(document.documentElement);
             $('.mobile-filter').val(filterValue);
         });
 
-        function generatePortfolioItems(artworks) {
-            const portfolioContainer = document.querySelector('.grid .row');
-            portfolioContainer.innerHTML = '';
 
-            artworks.forEach(art => {
-                const itemHTML = `
-                        <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category}">
-                            <div class="portfolio hover-style-4">
-                                <div class="image-item">
-                                    <img src="../${art.path}" alt="${art.name}" loading="lazy">
-                                    <div class="portfolio-title3">
-                                        <h3>${art.name}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                portfolioContainer.insertAdjacentHTML('beforeend', itemHTML);
-            });
-        }
 
+        // 主入口
         // 初始化页面
         $(document).ready(function () {
             // 加载艺术作品数据
-            fetch('../artwork.json')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
+            fetchArtworks('../artwork.json')
                 .then(artworks => {
                     // 处理分类数据
-                    const categories = Array.from(
-                        new Set(artworks.map(item => item.category))
-                    ).map(category => ({
-                        value: category,
-                        text: category
-                    }));
+                    const categories = processCategories(artworks);
 
                     // 生成界面元素
                     generateFilters(categories);
@@ -4735,6 +4786,20 @@ flexibility(document.documentElement);
                         // 预加载图片
                         const tempImg = new Image();
                         tempImg.src = imgSrc;
+
+                        const $parent = $(this).closest('[data-artwork]');
+                        const artworkData = JSON.parse($parent.attr('data-artwork'));
+
+                        // 更新图片
+                        const $modalImage = $('.modal-image');
+                        $modalImage.attr('src', `../${artworkData.path}`).attr('alt', artworkData
+                            .name);
+
+                        // 更新信息
+                        $('.artwork-name').text(artworkData.name);
+                        $('.material').html(`<strong>材料：</strong>${artworkData.material}`);
+                        $('.size').html(`<strong>尺寸：</strong>${artworkData.size}`);
+                        // $('.description').html(artworkData.des || '暂无描述');
 
                         tempImg.onload = () => {
                             // 更新模态框内容
@@ -4763,29 +4828,6 @@ flexibility(document.documentElement);
                         tempImg.onerror = () => {
                             console.error('图片加载失败:', imgSrc);
                         };
-                    });
-
-                    // 关闭模态框功能
-                    function closeModal() {
-                        $('.modal-image').css({
-                            transform: 'scale(0.9)',
-                            opacity: 0
-                        });
-
-                        setTimeout(() => {
-                            $('.image-modal')
-                                .removeClass('active')
-                                .css('display', 'none');
-                        }, 300);
-                    }
-
-                    // 绑定关闭事件
-                    $('.close-modal').on('click', closeModal);
-                    $(document).on('keyup', function (e) {
-                        if (e.key === "Escape") closeModal();
-                    });
-                    $('.image-modal').on('click', function (e) {
-                        if ($(e.target).hasClass('image-modal')) closeModal();
                     });
 
                     // 初始化Isotope布局

@@ -51,8 +51,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1;
+    background: rgba(233, 228, 228, 0.9);
+    z-index: 9999;
     display: none;
     justify-content: center;
     align-items: center;
@@ -60,8 +60,7 @@
     transition: opacity 0.3s ease;
 }
 
-.image-modal .active {
-    display: flex;
+.image-modal.active {
     opacity: 1;
 }
 
@@ -112,65 +111,52 @@
     transition: 0.3s;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     line-height: 1;
+    padding-bottom: 0.1%;
 }
 
 .close-modal:hover {
     color: #ff0000;
-    transform: rotate(90deg);
 }
 
-.image-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(233, 228, 228, 0.9);
-    z-index: 9999;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.portfolio-title3 .artwork-name {
+    color:#9b2a2a;
 }
 
-.image-modal.active {
-    opacity: 1;
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.modal-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    background: #f8f7f7;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.modal-image {
-    max-width: 100%;
-    max-height: 80vh;
-    display: block;
+.artwork-info {
+    color: #333;
+    max-width: 600px;
     margin: 0 auto;
-    transition: all 0.3s ease;
+    text-align: center;
 }
 
-.close-modal {
-    position: absolute;
-    top: -30px;
-    right: -30px;
-    color: white;
-    font-size: 40px;
-    cursor: pointer;
-    transition: 0.3s;
+.artwork-name {
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 
+.artwork-meta p {
+    margin: 8px 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.description {
+    color: #666;
+    font-style: italic;
+}
 
 /* 作品列表 */
 /* 分类菜单容器 */
