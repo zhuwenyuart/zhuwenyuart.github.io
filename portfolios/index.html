@@ -4814,18 +4814,31 @@ flexibility(document.documentElement);
             portfolioContainer.innerHTML = '';
 
             artworks.forEach(art => {
+                // const itemHTML = `
+                //         <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category} ${art.time}" data-artwork='${JSON.stringify(art)}'>
+                //             <div class="portfolio hover-style-4">
+                //                 <div class="image-item">
+                //                     <source srcset="../${art.Path}" type="image/webp">                                   
+                //                     <div class="portfolio-title3 artwork-name">
+                //                         <strong>${art.name}</strong>
+                //                     </div>
+                //                 </div>
+                //             </div>
+                //         </div>
+                //     `;
+
                 const itemHTML = `
-                        <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category} ${art.time}" data-artwork='${JSON.stringify(art)}'>
-                            <div class="portfolio hover-style-4">
-                                <div class="image-item">
-                                    <img src="../${art.path}" alt="${art.name}" loading="lazy">
-                                    <div class="portfolio-title3 artwork-name">
-                                        <strong>${art.name}</strong>
-                                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category} ${art.time}" data-artwork='${JSON.stringify(art)}'>
+                        <div class="portfolio hover-style-4">
+                            <div class="image-item">
+                                <img src="../${art.path}" alt="${art.name}" loading="lazy">
+                                <div class="portfolio-title3 artwork-name">
+                                    <strong>${art.name}</strong>
                                 </div>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `;
                 portfolioContainer.insertAdjacentHTML('beforeend', itemHTML);
             });
         }
