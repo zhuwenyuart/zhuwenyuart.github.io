@@ -3,14 +3,17 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-C4M63F7FJ6"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C4M63F7FJ6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-		gtag('config', 'G-C4M63F7FJ6');
-	</script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-C4M63F7FJ6');
+    </script>
 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -4699,7 +4702,7 @@ flexibility(document.documentElement);
                 }));
         }
 
-        // 修改后的过滤按钮生成
+        // 过滤按钮生成
         function generateFilterButtons(categories) {
             const buttonContainer = document.querySelector('.filter-buttons');
             const selectContainer = document.querySelector('.mobile-filter');
@@ -4755,6 +4758,30 @@ flexibility(document.documentElement);
                 });
                 $(`.filter-buttons button[data-filter="${filterValue}"]`).addClass('active').siblings()
                     .removeClass('active');
+            });
+        }
+
+        // 模态框点击事件绑定
+        function bindImageClickEvents() {
+            // 使用事件委托处理动态生成的元素
+            $('.grid').on('click', '.grid-item', function () {
+                const artworkData = JSON.parse($(this).attr('data-artwork'));
+
+                // 更新模态框内容
+                $('.modal-image').attr('src', `../${artworkData.path}`).attr('alt', artworkData.name);
+                $('.artwork-model-name').text(artworkData.name);
+                $('.material').text(`材料：${artworkData.material}`);
+                $('.size').text(`尺寸：${artworkData.size}`);
+                $('.description').text(artworkData.description);
+
+                // 显示模态框
+                $('.image-modal').css('display', 'flex').addClass('active');
+                setTimeout(() => {
+                    $('.modal-image').css({
+                        transform: 'scale(1)',
+                        opacity: 1
+                    });
+                }, 10);
             });
         }
 
@@ -4857,6 +4884,7 @@ flexibility(document.documentElement);
                 generateFilterButtons(categoriesData);
                 generatePortfolioItems(artworks);
                 bindFilterEvents();
+                bindImageClickEvents();
 
                 // 初始化Isotope
                 $('.grid').imagesLoaded().progress(() => {
