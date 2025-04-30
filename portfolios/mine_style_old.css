@@ -1,9 +1,9 @@
 .ptb-mine {
-    padding: 10px 0 0px 0;
+    padding: 10px 0 30px 0;
 }
 
 .portfolio-container {
-    max-height: 90vh;
+    min-height: 90vh;
     overflow-y: auto;
 }
 
@@ -13,45 +13,58 @@
 
 /* 提升标题层级 */
 .portfolio-title3 {
+    position: absolute;
     z-index: 2;
+    /* 高于遮罩层 */
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+/* 悬停时状态 */
+.portfolio.hover-style-4:hover::before {
+    opacity: 1;
+}
+
+.portfolio.hover-style-4:hover .portfolio-title3 {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 
-/* 过滤器按钮样式 和 响应式切换 */
-.mobile-filter {
-    display: none;
-    width: 200px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    appearance: none;
-    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center/1em;
+/* PC端按钮样式 */
+.filter-buttons {
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
 }
 
-@media (max-width: 768px) {
-    .pc-filter {
-        display: none !important;
-    }
-
-    .mobile-filter {
-        display: block;
-    }
+.filter-buttons.animating-out {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
-.site-footer {
-    z-index: 9998;
+.filter-buttons.animating-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
+/* 优化现有过渡效果 */
+.filter-buttons button .button-text::after {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* ---------------------------------------------------------------------- */
-/* ------------------------------- 模态框 ------------------------------- */
-/* ---------------------------------------------------------------------- */
-.art-modal {
+/* 模态框 */
+.image-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(233, 228, 228, 0.95);
+    background: rgba(233, 228, 228, 0.9);
     z-index: 9999;
     display: none;
     justify-content: center;
@@ -60,89 +73,168 @@
     transition: opacity 0.3s ease;
 }
 
-.art-modal.active {
+.image-modal.active {
     opacity: 1;
-    display: flex;
 }
 
 .modal-content {
     position: relative;
-    border-radius: 8px;
     max-width: 90%;
-    max-height: 90vh;
-    padding: 30px;
+    max-height: 90%;
+    background: #000;
+    padding: 20px;
+    border-radius: 8px;
     animation: modalOpen 0.3s ease-out;
-    overflow-y: auto;
 }
 
 @keyframes modalOpen {
-    from { transform: scale(0.95); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
 
-.modal-image-container {
-    max-width: 800px;
-    margin: 0 auto 20px;
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .modal-image {
-    width: 100%;
-    height: auto;
-    max-height: 70vh;
-    object-fit: contain;
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: 0 auto;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.image-modal.active .modal-image {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .close-modal {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 30px;
+    top: -30px;
+    right: -30px;
+    color: white;
+    font-size: 40px;
     cursor: pointer;
-    color: #333;
-    transition: color 0.3s;
+    transition: 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    padding-bottom: 0.1%;
 }
 
 .close-modal:hover {
     color: #ff0000;
 }
 
-.artwork-info {
-    text-align: center;
-    color: #333;
+.portfolio-title3 .artwork-name {
+    color: #9b2a2a;
 }
 
-.artwork-title {
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.artwork-info {
+    color: #333;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.artwork-model-name {
     font-size: 20px;
     margin-bottom: 15px;
 }
 
 .artwork-meta p {
     margin: 8px 0;
-    /* font-size: 16px; */
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.description {
     color: #666;
-}
-
-.artwork-description {
-    margin-top: 15px;
     font-style: italic;
-    color: #888;
+}
+
+/* 作品列表 */
+/* 分类菜单容器 */
+.portfolio-menu {
+    position: relative;
+}
+
+/* PC端按钮样式 */
+.filter-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-buttons button {
+    padding: 8px 20px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-buttons button.active,
+.filter-buttons button:hover {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+/* 移动端下拉菜单 */
+.mobile-filter {
+    display: none;
+    width: 200px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    appearance: none;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center/1em;
+}
+
+/* 响应式切换 */
+@media (max-width: 768px) {
+    .filter-buttons {
+        display: none !important;
+    }
+
+    .mobile-filter {
+        display: block;
+    }
 }
 
 
 
 
-/* ---------------------------------------------------------------------- */
-/* -------------------------------- 滑块 -------------------------------- */
-/* ---------------------------------------------------------------------- */
+/* 滑块 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;500&display=swap');
 
 .switch-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     gap: 15px;
+    /* 添加间距控制 */
 }
 
 .filter-switch {
