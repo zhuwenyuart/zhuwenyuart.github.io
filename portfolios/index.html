@@ -4780,6 +4780,16 @@ flexibility(document.documentElement);
                         `;
                     portfolioContainer.insertAdjacentHTML('beforeend', itemHTML);
                 });
+
+
+                // 新增：为所有图片绑定加载事件
+                portfolioContainer.querySelectorAll('img').forEach(img => {
+                    img.addEventListener('load', () => {
+                        if ($grid) {
+                            $grid.isotope('layout'); // 触发重排
+                        }
+                    });
+                });
             }
 
             // 切换分类显示
@@ -4849,7 +4859,7 @@ flexibility(document.documentElement);
                 .then(response => response.json())
                 .then(artworks => {
                     allArtworks = artworks;
-                    
+
                     generatePortfolioItems();
                     generateAllFilters();
                     initModal(); // 初始化模态框功能
@@ -4902,39 +4912,6 @@ flexibility(document.documentElement);
                 });
         });
     </script>
-
-    <!-- <style>
-        /* 添加样式控制分类组显示 */
-        .pc-filter .filter-group {
-            display: none;
-        }
-
-        .pc-filter .filter-group.category-group {
-            display: block;
-            /* 默认显示分类 */
-        }
-
-        .mobile-filter-group {
-            display: none;
-        }
-
-        .mobile-filter-group.category-group {
-            display: block;
-            /* 默认显示分类 */
-        }
-
-        /* 默认显示分类组 */
-        .pc-filter .filter-group.category-group,
-        .mobile-filter-group.category-group {
-            display: block;
-        }
-
-        /* 隐藏时间组 */
-        .pc-filter .filter-group.time-group,
-        .mobile-filter-group.time-group {
-            display: none;
-        }
-    </style> -->
 </body>
 
 
