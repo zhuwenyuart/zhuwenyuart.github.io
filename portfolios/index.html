@@ -26,7 +26,6 @@
 
     <!-- all css here -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mine_style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- boostrap核心库 -->
     <link rel="stylesheet" href="css/magnific-popup.css"> <!-- 图片放大弹窗插件 -->
     <link rel="stylesheet" href="css/meanmenu.css"> <!-- 移动端菜单插件 -->
@@ -4603,22 +4602,36 @@ flexibility(document.documentElement);
     <div class="portfolio-area ptb-mine">
         <div class="container">
 
-            <label class="switch-mine">
-                <input class="toggle-mine" type="checkbox">
-                <span class="slider-mine"></span>
-                <span class="status-label-mine series-mine">系列分类</span>
-                <span class="status-label-mine time-mine">时间分类</span>
-            </label>
+            <div class="switch-container">
+                <label class="filter-switch">
+                    <input class="filter-toggle" type="checkbox">
+                    <span class="filter-slider"></span>
+                    <span class="status-label label-series">系列分类</span>
+                    <span class="status-label label-time">时间分类</span>
+                </label>
 
-            <!-- 过滤器 -->
-            <div class="portfolio-menu portfolio2-menu mb-50 home-three">
-                <!-- PC端按钮组 -->
-                <div class="pc-filter"></div>
+                <!-- 过滤器 -->
+                <div class="portfolio-menu portfolio2-menu home-three">
+                    <!-- PC端按钮容器 -->
+                    <div class="pc-filter">
+                        <div class="filter-group category-group">
+                            <!-- 分类按钮 -->
+                        </div>
+                        <div class="filter-group time-group">
+                            <!-- 时间按钮 -->
+                        </div>
+                    </div>
 
-                <!-- 移动端下拉菜单 -->
-                <select class="mobile-filter">
-                    <option value="*">全部作品</option>
-                </select>
+                    <!-- 移动端下拉菜单 -->
+                    <div class="mobile-filter">
+                        <div class="mobile-filter-group category-group">
+                            <select>...</select>
+                        </div>
+                        <div class="mobile-filter-group time-group">
+                            <select>...</select>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 图片内容 -->
@@ -4628,125 +4641,300 @@ flexibility(document.documentElement);
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- all js here -->
-        <script src="js/vendor/jquery-1.12.0.min.js"></script> <!-- jQuery核心库 -->
-        <script src="js/isotope.pkgd.min.js"></script> <!-- 实现瀑布流和过滤功能 -->
-        <script src="js/imagesloaded.pkgd.min.js"></script> <!-- 检测图片加载完成，确保布局准确 -->
-        <script src="js/jquery.meanmenu.js"></script> <!-- 移动端响应式菜单 -->
+    <div class="art-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-image-container">
+                <img class="modal-image" alt="作品大图">
+            </div>
+            <div class="artwork-info">
+                <div class="artwork-meta">
+                    <strong class="artwork-title"></strong>
+                    <p class="artwork-time"></p>
+                    <p class="artwork-material"></p>
+                    <p class="artwork-size"></p>
+                </div>
+                <p class="artwork-description"></p>
+            </div>
+        </div>
+    </div>
 
-        <!-- <script src="js/bootstrap.min.js"></script>             boostrap核心库 -->
-        <!-- <script src="js/owl.carousel.min.js"></script>          轮播图插件 -->
+    <!-- all js here -->
+    <script src="js/vendor/jquery-1.12.0.min.js"></script> <!-- jQuery核心库 -->
+    <script src="js/isotope.pkgd.min.js"></script> <!-- 实现瀑布流和过滤功能 -->
+    <script src="js/imagesloaded.pkgd.min.js"></script> <!-- 检测图片加载完成，确保布局准确 -->
+    <script src="js/jquery.meanmenu.js"></script> <!-- 移动端响应式菜单 -->
 
-        <script>
-            // 生成分类按钮
-            function generateFilters(categories) {
-                const filterContainer = document.querySelector('.pc-filter');
-                const selectContainer = document.querySelector('.mobile-filter');
-                filterContainer.innerHTML = '';
-                selectContainer.innerHTML = '<option value="*">全部作品</option>';
+    <!-- <script src="js/bootstrap.min.js"></script>             boostrap核心库 -->
+    <!-- <script src="js/owl.carousel.min.js"></script>          轮播图插件 -->
+
+    <link rel="stylesheet" href="mine_style.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let currentFilterType = 'category';
+            let allArtworks = [];
+            let $grid;
+
+            // 生成所有分类按钮（同时生成两种分类）
+            function generateAllFilters() {
+                const pcFilterContainer = document.querySelector('.pc-filter');
+                const mobileFilterContainer = document.querySelector('.mobile-filter');
+
+                // 清空容器
+                pcFilterContainer.innerHTML = '';
+                mobileFilterContainer.innerHTML = '';
+
+                // 创建两个分类容器
+                const categoryGroup = document.createElement('div');
+                categoryGroup.className = 'filter-group category-group';
+                const timeGroup = document.createElement('div');
+                timeGroup.className = 'filter-group time-group';
+
+                // 生成分类按钮
+                generateFilterGroup('category', categoryGroup);
+                generateFilterGroup('time', timeGroup);
+
+                // 生成移动端下拉菜单
+                generateMobileFilters('category', mobileFilterContainer);
+                generateMobileFilters('time', mobileFilterContainer);
+
+                // 默认显示分类过滤
+                timeGroup.style.display = 'none';
+                mobileFilterContainer.querySelector('.time-group').style.display = 'none';
+
+                // 添加到DOM
+                pcFilterContainer.appendChild(categoryGroup);
+                pcFilterContainer.appendChild(timeGroup);
+            }
+
+            // 生成单个分类组的按钮
+            function generateFilterGroup(filterType, container) {
+                const values = Array.from(new Set(allArtworks.map(item => item[filterType])));
+                if (filterType === 'time') {
+                    values.sort((a, b) => Number(b) - Number(a)); // 时间降序
+                }
 
                 // 添加"全部"按钮
                 const allButton = document.createElement('button');
                 allButton.className = 'active';
                 allButton.dataset.filter = '*';
                 allButton.textContent = '全部作品';
-                filterContainer.appendChild(allButton);
+                container.appendChild(allButton);
 
                 // 添加分类按钮
-                categories.forEach(category => {
-                    // PC端按钮
+                values.forEach(value => {
                     const button = document.createElement('button');
-                    button.dataset.filter = `.${category.value}`;
-                    button.textContent = category.value;
-                    filterContainer.appendChild(button);
-
-                    // 移动端下拉菜单选项
-                    const option = document.createElement('option');
-                    option.value = `.${category.value}`;
-                    option.textContent = category.value;
-                    selectContainer.appendChild(option);
+                    button.dataset.filter = `.${filterType}-${value}`;
+                    button.textContent = value;
+                    container.appendChild(button);
                 });
             }
 
-            // 生成图片项目
-            function generatePortfolioItems(artworks) {
-                const portfolioContainer = document.querySelector('.grid .row');
-                portfolioContainer.innerHTML = ''; // 清空现有内容
+            // 生成移动端下拉菜单
+            function generateMobileFilters(filterType, container) {
+                const values = Array.from(new Set(allArtworks.map(item => item[filterType])));
+                if (filterType === 'time') {
+                    values.sort((a, b) => Number(b) - Number(a));
+                }
 
-                artworks.forEach(art => {
+                const selectWrapper = document.createElement('div');
+                selectWrapper.className = `mobile-filter-group ${filterType}-group`;
+                const select = document.createElement('select');
+
+                // 添加"全部"选项
+                const allOption = document.createElement('option');
+                allOption.value = '*';
+                allOption.textContent = '全部作品';
+                select.appendChild(allOption);
+
+                // 添加分类选项
+                values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = `.${filterType}-${value}`;
+                    option.textContent = value;
+                    select.appendChild(option);
+                });
+
+                selectWrapper.appendChild(select);
+                container.appendChild(selectWrapper);
+            }
+
+            // 生成图片项目
+            function generatePortfolioItems() {
+                const portfolioContainer = document.querySelector('.grid .row');
+                portfolioContainer.innerHTML = '';
+
+                allArtworks.forEach(art => {
                     const itemHTML = `
-                <div class="col-lg-6 col-md-6 col-xs-12 grid-item ${art.category}">
-                    <div class="portfolio hover-style-4">
-                        <a href="#">
-                            <img src="../${art.path}" alt="${art.name}" loading="lazy" />
-                        </a>
-                        <div class="portfolio-3-icon">
-                            <a href="single-portfolio.html?art=${encodeURIComponent(art.name)}">
-                                <i class="icon_zoom-in_alt"></i>
-                            </a>
-                        </div>
-                        <div class="portfolio-title3">
-                            <h3><a href="#">${art.name}</a></h3>
-                        </div>
-                    </div>
-                </div>
-            `;
+                            <div class="col-lg-6 col-md-6 col-xs-12 grid-item category-${art.category} time-${art.time}" data-artwork='${JSON.stringify(art).replace(/'/g, "&apos;")}'>
+                                <div class="portfolio hover-style-4">
+                                    <img src="../${art.path}" alt="${art.name}" loading="lazy" />
+                                    <div class="portfolio-title3">
+                                        <h3><a href="#">${art.name}</a></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
                     portfolioContainer.insertAdjacentHTML('beforeend', itemHTML);
                 });
             }
 
-            // 初始化页面
-            document.addEventListener('DOMContentLoaded', function () {
-                let currentFilterType = 'category'; // 当前分类类型
-                let $grid; // 保存 Isotope 实例
+            // 切换分类显示
+            function toggleFilterDisplay(type) {
+                // PC端切换
+                document.querySelectorAll('.pc-filter .filter-group').forEach(group => {
+                    group.style.display = group.classList.contains(`${type}-group`) ? 'block' :
+                        'none';
+                });
 
-                fetch('../artwork.json')
-                    .then(response => response.json())
-                    .then(artworks => {
-                        // 获取唯一分类
-                        const categories = Array.from(
-                            new Set(artworks.map(item => item.category)) // 第一步：提取所有分类并去重
-                        ).map(category => ({ // 第二步：转换为对象格式
-                            value: category,
-                            text: category
-                        }));
+                // 移动端切换
+                document.querySelectorAll('.mobile-filter-group').forEach(group => {
+                    group.style.display = group.classList.contains(`${type}-group`) ? 'block' :
+                        'none';
+                });
 
-                        generateFilters(categories);
-                        generatePortfolioItems(artworks);
+                // 重置过滤状态
+                $grid.isotope({
+                    filter: '*'
+                });
+                document.querySelectorAll('button.active').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('button[data-filter="*"]').forEach(btn => btn.classList.add(
+                    'active'));
+                document.querySelectorAll('select').forEach(select => select.value = '*');
+            }
 
-                        // 初始化插件
-                        $('.grid').imagesLoaded(function () {
-                            var $grid = $('.grid').isotope({
-                                itemSelector: '.grid-item',
-                                percentPosition: true,
-                                masonry: {
-                                    columnWidth: '.grid-item'
-                                }
-                            });
+            function initModal() {
+                // 点击图片事件
+                $(document).on('click', '.grid-item', function () {
+                    const artwork = JSON.parse($(this).attr('data-artwork'));
 
-                            $('.portfolio-menu').on('click', 'button', function () {
-                                var filterValue = $(this).attr('data-filter');
+                    // 填充数据
+                    $('.modal-image').attr('src', `../${artwork.path}`);
+                    $('.artwork-title').text(artwork.name);
+                    $('.artwork-time').html(`<strong>创作时间:</strong> ${artwork.time}`);
+                    $('.artwork-material').html(`<strong>材料:</strong> ${artwork.material}`);
+                    $('.artwork-size').html(`<strong>尺寸:</strong> ${artwork.size}`);
+                    $('.artwork-description').text(artwork.des || '暂无描述');
+
+                    // 显示模态框
+                    $('.art-modal').addClass('active');
+                });
+
+                // 关闭模态框
+                $('.close-modal').on('click', () => {
+                    $('.art-modal').removeClass('active');
+                });
+
+                // 点击背景关闭
+                $(document).on('click', (e) => {
+                    if ($(e.target).hasClass('art-modal')) {
+                        $('.art-modal').removeClass('active');
+                    }
+                });
+
+                // ESC键关闭
+                $(document).on('keyup', (e) => {
+                    if (e.key === "Escape") {
+                        $('.art-modal').removeClass('active');
+                    }
+                });
+            }
+
+
+            // 初始化
+            fetch('../artwork.json')
+                .then(response => response.json())
+                .then(artworks => {
+                    allArtworks = artworks;
+                    
+                    generatePortfolioItems();
+                    generateAllFilters();
+                    initModal(); // 初始化模态框功能
+
+                    $('.grid').imagesLoaded(function () {
+                        $grid = $('.grid').isotope({
+                            itemSelector: '.grid-item',
+                            percentPosition: true,
+                            masonry: {
+                                columnWidth: '.grid-item'
+                            }
+                        });
+
+                        // PC端按钮事件
+                        document.querySelectorAll('.pc-filter button').forEach(button => {
+                            button.addEventListener('click', function () {
+                                const filterValue = this.dataset.filter;
                                 $grid.isotope({
                                     filter: filterValue
                                 });
-                                $(this).addClass('active').siblings().removeClass('active');
-                            });
-
-                            // 移动端下拉菜单事件
-                            $('.mobile-filter').on('change', function () {
-                                var filterValue = $(this).val();
-                                $grid.isotope({
-                                    filter: filterValue
-                                });
-                                $('.pc-filter button').removeClass('active');
-                                $(`.pc-filter button[data-filter="${filterValue}"]`)
-                                    .addClass('active');
+                                document.querySelectorAll('.pc-filter button')
+                                    .forEach(btn => btn.classList.remove(
+                                        'active'));
+                                this.classList.add('active');
                             });
                         });
-                    })
-            });
-        </script>
+
+                        // 移动端下拉菜单事件
+                        document.querySelectorAll('.mobile-filter-group select').forEach(
+                            select => {
+                                select.addEventListener('change', function () {
+                                    const filterValue = this.value;
+                                    $grid.isotope({
+                                        filter: filterValue
+                                    });
+                                    document.querySelectorAll(
+                                        `.pc-filter button[data-filter="${filterValue}"]`
+                                    ).forEach(btn => {
+                                        btn.click();
+                                    });
+                                });
+                            });
+                    });
+
+                    // 切换按钮事件
+                    document.querySelector('.filter-toggle').addEventListener('change', function () {
+                        currentFilterType = this.checked ? 'time' : 'category';
+                        toggleFilterDisplay(currentFilterType);
+                    });
+                });
+        });
+    </script>
+
+    <!-- <style>
+        /* 添加样式控制分类组显示 */
+        .pc-filter .filter-group {
+            display: none;
+        }
+
+        .pc-filter .filter-group.category-group {
+            display: block;
+            /* 默认显示分类 */
+        }
+
+        .mobile-filter-group {
+            display: none;
+        }
+
+        .mobile-filter-group.category-group {
+            display: block;
+            /* 默认显示分类 */
+        }
+
+        /* 默认显示分类组 */
+        .pc-filter .filter-group.category-group,
+        .mobile-filter-group.category-group {
+            display: block;
+        }
+
+        /* 隐藏时间组 */
+        .pc-filter .filter-group.time-group,
+        .mobile-filter-group.time-group {
+            display: none;
+        }
+    </style> -->
 </body>
 
 
