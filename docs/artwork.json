@@ -447,5 +447,16 @@
     "material": "电子",
     "size": "100x100",
     "des": "测试"
+  },
+  {
+    "name": "梦想萌芽的瞬间",
+    "path": "/media/artworks/mwwcvd0x-4da7rckb.jpg",
+    "time": "2026",
+    "category": "背影",
+    "material": "布面油画",
+    "size": "80×100",
+    "detail": [
+      "/media/artworks/mwwcunuz-aiove4y3.jpg"
+    ]
   }
 ]
