@@ -2,18 +2,16 @@
   "name": "zhuwenyu-art-portfolio",
   "private": true,
   "scripts": {
-    "dev": "node scripts/dev.cjs",
-    "build": "node scripts/build.cjs",
+    "dev": "node scripts/dev-server.cjs",
     "preview": "node scripts/dev-server.cjs",
     "test": "node --test tests/content.test.cjs",
     "test:browser": "playwright test",
-    "check": "npm run build && npm test && npm run test:browser"
+    "check": "node scripts/check.cjs && npm test && npm run test:browser"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
-    "@11ty/eleventy": "3.1.8",
     "@playwright/test": "1.65.1",
     "js-yaml": "4.3.2",
     "sharp": "0.35.5"

@@ -3,7 +3,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const { pipeline } = require('node:stream');
 
-const root = path.resolve(process.env.SITE_ROOT || path.join(__dirname, '..', 'dist'));
+const root = path.resolve(process.env.SITE_ROOT || path.join(__dirname, '..', 'docs'));
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',

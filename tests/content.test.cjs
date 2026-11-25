@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const sharp = require('sharp');
 const { validateArtworkContent, validateImage, limits } = require('../scripts/artwork-validation.cjs');
-const { validateArtworks, imagePath } = require('../src/assets/js/portfolio/artwork-data.js');
+const { validateArtworks, imagePath } = require('../docs/assets/js/portfolio/artwork-data.js');
 
 // Synthetic examples: independent of the live catalog, names and ordering.
 const record = overrides => ({
@@ -15,8 +15,8 @@ const record = overrides => ({
 
 async function fixture(run) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'artwork-test-'));
-  fs.mkdirSync(path.join(directory, 'public/media/artworks'), { recursive: true });
-  const image = path.join(directory, 'public/media/artworks/example.png');
+  fs.mkdirSync(path.join(directory, 'docs/media/artworks'), { recursive: true });
+  const image = path.join(directory, 'docs/media/artworks/example.png');
   await sharp({ create: { width: 12, height: 10, channels: 3, background: '#998877' } }).png().toFile(image);
   try { await run(directory, image); }
   finally { fs.rmSync(directory, { recursive: true, force: true }); }
@@ -42,7 +42,7 @@ test('artwork paths enforce the media boundary without depending on real filenam
   ]) assert.throws(() => imagePath(value), value);
 });
 
-test('referenced images must exist; only declared legacy optional exceptions are tolerated', async () => {
+test('referenced main and detail images must exist', async () => {
   await fixture(async directory => {
     const options = { projectRoot: directory };
     await validateArtworkContent({ ...options, artworks: [record()] });
@@ -50,14 +50,12 @@ test('referenced images must exist; only declared legacy optional exceptions are
     await assert.rejects(validateArtworkContent({ ...options, artworks: [record({ path: missing })] }));
     const optional = record({ detail: [missing] });
     await assert.rejects(validateArtworkContent({ ...options, artworks: [optional] }));
-    const result = await validateArtworkContent({ ...options, artworks: [optional], legacyMissingDetails: [missing] });
-    assert.deepEqual(result.missingDetails, optional.detail);
   });
 });
 
 test('image validation catches corruption, mislabeled format and configured size limits', async () => {
   await fixture(async (directory, image) => {
-    const wrong = path.join(directory, 'public/media/artworks/wrong.jpg');
+    const wrong = path.join(directory, 'docs/media/artworks/wrong.jpg');
     fs.copyFileSync(image, wrong);
     await assert.rejects(validateImage(wrong));
     fs.writeFileSync(image, 'not an image');

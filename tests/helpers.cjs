@@ -2,7 +2,7 @@ const { test: base, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const artworks = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content/artwork.json'), 'utf8'));
+const artworks = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'docs/artwork.json'), 'utf8'));
 
 const test = base.extend({
   page: async ({ page, baseURL }, use) => {

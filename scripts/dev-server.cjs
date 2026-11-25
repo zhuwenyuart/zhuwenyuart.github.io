@@ -41,7 +41,7 @@ function inside(root, filename) {
 
 // Development preview only: no directory listing, repository files, uploads,
 // authentication or production hardening. Use an SSH tunnel by default.
-function createPreviewServer({ root = path.join(__dirname, '..', 'dist') } = {}) {
+function createPreviewServer({ root = path.join(__dirname, '..', 'docs') } = {}) {
   const realRoot = fs.realpathSync(root);
   return http.createServer(async (request, response) => {
     if (!['GET', 'HEAD'].includes(request.method)) {

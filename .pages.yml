@@ -2,7 +2,7 @@
 media:
   - name: artworks
     label: 作品图片
-    input: public/media/artworks
+    input: docs/media/artworks
     output: /media/artworks
     extensions: [jpg, jpeg, png, webp]
     rename: random
@@ -11,7 +11,7 @@ content:
   - name: artworks
     label: 作品管理
     type: file
-    path: content/artwork.json
+    path: docs/artwork.json
     format: json
     list: true
     fields:
